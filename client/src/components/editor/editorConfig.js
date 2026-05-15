@@ -61,6 +61,7 @@ const entityConfig = {
     listFields: [
       { key: "id", label: "ID", type: "number" },
       { key: "nom", label: "Nom", type: "text" },
+      { key: "prix_vente", label: "Prix de vente", type: "currency" },
       { key: "marque_nom", label: "Nom de la marque", type: "text" },
       { key: "model_nom", label: "Nom du modèle", type: "text" },
       { key: "annee", label: "Année", type: "number" },
@@ -89,9 +90,11 @@ const entityConfig = {
         optionValueKey: "id",
         placeholder: "Choisir un modèle",
         required: true,
+        hiddenOnDetail: true,
       },
       { key: "nom", label: "Nom", type: "text", required: true },
-      { key: "marque_id", label: "ID marque", type: "number", hiddenOnForm: true },
+      { key: "prix_vente", label: "Prix de vente", type: "number", required: true },
+      { key: "marque_id", label: "ID marque", type: "number", hiddenOnForm: true, hiddenOnDetail: true },
       { key: "marque_nom", label: "Nom de la marque", type: "text", hiddenOnForm: true },
       { key: "model_nom", label: "Nom du modèle", type: "text", hiddenOnForm: true },
       { key: "annee", label: "Année", type: "number", required: true },
@@ -153,6 +156,9 @@ const entityConfig = {
       primaryVehicleImageField,
       { key: "description", label: "Description", type: "textarea" },
       { key: "kilometrage", label: "Kilométrage", type: "number" },
+      { key: "prix_achat", label: "Prix d'achat", type: "number" },
+      { key: "montant_transport", label: "Montant transport", type: "number" },
+      { key: "montant_dedouanement", label: "Montant dédouanement", type: "number" },
       { key: "ajoute_par", label: "Ajouté par", type: "number", hiddenOnForm: true },
       { key: "ajoute_le", label: "Ajouté le", type: "text", hiddenOnForm: true },
       { key: "modifie_par", label: "Modifié par", type: "number", hiddenOnForm: true },
@@ -201,6 +207,16 @@ export function formatEntityValue(field, value) {
 
   if (value === "" || value === null || value === undefined) {
     return "-";
+  }
+
+  if (field.type === "currency") {
+    const numericValue = Number(value);
+
+    if (!Number.isFinite(numericValue)) {
+      return "-";
+    }
+
+    return `${numericValue.toLocaleString("fr-FR")} FCFA`;
   }
 
   if (Array.isArray(field.options)) {

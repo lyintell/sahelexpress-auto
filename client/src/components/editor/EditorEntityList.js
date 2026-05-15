@@ -6,6 +6,23 @@ import { useMemo } from "react";
 import { formatEntityValue } from "./editorConfig";
 import { useEditorClientReady, useEditorEntityData } from "./editorDataStore";
 
+function buildDisplayOptions(field, sources) {
+  if (Array.isArray(field.options)) {
+    return field.options;
+  }
+
+  if (!field.optionsSource) {
+    return [];
+  }
+
+  const items = sources[field.optionsSource] ?? [];
+
+  return items.map((item) => ({
+    label: String(item[field.optionLabelKey ?? "nom"] ?? item.nom ?? item.id),
+    value: String(item[field.optionValueKey ?? "id"] ?? item.id),
+  }));
+}
+
 function getStatusBadgeClass(status) {
   if (status === "disponible") {
     return "border border-emerald-200 bg-emerald-50 text-emerald-700";
@@ -26,7 +43,15 @@ export default function EditorEntityList({ config, entityKey }) {
   const router = useRouter();
   const isClientReady = useEditorClientReady();
   const items = useEditorEntityData(entityKey);
+  const brands = useEditorEntityData("marques");
   const visibleFields = config.listFields ?? config.fields;
+  const fieldOptions = useMemo(() => {
+    const sources = { marques: brands };
+
+    return Object.fromEntries(
+      visibleFields.map((field) => [field.key, buildDisplayOptions(field, sources)]),
+    );
+  }, [brands, visibleFields]);
   const sortedItems = useMemo(() => {
     return [...items].sort((leftItem, rightItem) => Number(rightItem.id ?? 0) - Number(leftItem.id ?? 0));
   }, [items]);
@@ -53,6 +78,10 @@ export default function EditorEntityList({ config, entityKey }) {
           {formatEntityValue(field, value)}
         </span>
       );
+    }
+
+    if (fieldOptions[field.key]?.length) {
+      return formatEntityValue({ ...field, options: fieldOptions[field.key] }, value);
     }
 
     return formatEntityValue(field, value);

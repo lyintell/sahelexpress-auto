@@ -95,6 +95,22 @@ function normalizeVehicle(vehicle, modelsById, brandsById) {
       const parsedValue = Number(vehicle?.kilometrage);
       return Number.isFinite(parsedValue) ? parsedValue : null;
     })(),
+    prix_vente: (() => {
+      const parsedValue = Number(vehicle?.prix_vente);
+      return Number.isFinite(parsedValue) ? parsedValue : null;
+    })(),
+    prix_achat: (() => {
+      const parsedValue = Number(vehicle?.prix_achat);
+      return Number.isFinite(parsedValue) ? parsedValue : null;
+    })(),
+    montant_transport: (() => {
+      const parsedValue = Number(vehicle?.montant_transport);
+      return Number.isFinite(parsedValue) ? parsedValue : null;
+    })(),
+    montant_dedouanement: (() => {
+      const parsedValue = Number(vehicle?.montant_dedouanement);
+      return Number.isFinite(parsedValue) ? parsedValue : null;
+    })(),
     description: toText(vehicle?.description),
     ind_en_vedette: normalizeFeaturedFlag(vehicle?.ind_en_vedette),
     ind_etat: toText(vehicle?.ind_etat),

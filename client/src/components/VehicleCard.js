@@ -1,5 +1,6 @@
 import Link from "next/link";
 import Image from "next/image";
+import { formatFcfaAmount } from "../lib/currency";
 
 function getDisplayText(value) {
   if (value === null || value === undefined) {
@@ -7,10 +8,6 @@ function getDisplayText(value) {
   }
 
   return String(value);
-}
-
-function getFormattedDistance(value) {
-  return Number.isFinite(value) ? `${value.toLocaleString("fr-FR")} km` : "";
 }
 
 export default function VehicleCard({ vehicle }) {
@@ -55,19 +52,15 @@ export default function VehicleCard({ vehicle }) {
           </div>
 
           <div className="mt-5 grid grid-cols-2 gap-3 text-slate-700">
-            <div className="rounded-2xl border border-[var(--line)] bg-white p-3.5">
-              <p className="text-sm text-slate-500">Kilométrage</p>
+            <div className="col-span-2 rounded-2xl border border-emerald-200 bg-emerald-600 p-3.5 text-white">
+              <p className="text-sm text-emerald-50">Prix de vente</p>
               <p className="mt-1 text-lg font-semibold sm:text-xl">
-                {getFormattedDistance(vehicle.kilometrage)}
+                {formatFcfaAmount(vehicle.prix_vente)}
               </p>
             </div>
             <div className="rounded-2xl border border-[var(--line)] bg-white p-3.5">
               <p className="text-sm text-slate-500">Transmission</p>
               <p className="mt-1 text-lg font-semibold capitalize sm:text-xl">{getDisplayText(vehicle.type_transm)}</p>
-            </div>
-            <div className="rounded-2xl border border-[var(--line)] bg-white p-3.5">
-              <p className="text-sm text-slate-500">Carburant</p>
-              <p className="mt-1 text-lg font-semibold capitalize sm:text-xl">{getDisplayText(vehicle.type_carb)}</p>
             </div>
             <div className="rounded-2xl border border-[var(--line)] bg-white p-3.5">
               <p className="text-sm text-slate-500">Moteur</p>

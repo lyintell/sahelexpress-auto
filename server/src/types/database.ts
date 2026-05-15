@@ -43,6 +43,10 @@ export interface VehicleRecord {
   type_transm: VehicleTransmission;
   type_moteur: VehicleEngine;
   kilometrage: number | null;
+  prix_vente: number | null;
+  prix_achat: number | null;
+  montant_transport: number | null;
+  montant_dedouanement: number | null;
   description: string | null;
   ind_en_vedette: boolean;
   ind_etat: VehicleStatus;

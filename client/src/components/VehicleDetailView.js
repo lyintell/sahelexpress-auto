@@ -2,6 +2,7 @@
 
 import { useState } from "react";
 import Image from "next/image";
+import { formatFcfaAmount } from "../lib/currency";
 
 function getDisplayText(value) {
   if (value === null || value === undefined) {
@@ -9,6 +10,10 @@ function getDisplayText(value) {
   }
 
   return String(value);
+}
+
+function hasAmount(value) {
+  return value !== null && value !== undefined && Number.isFinite(Number(value));
 }
 
 function getStatusClasses(status) {
@@ -145,6 +150,13 @@ export default function VehicleDetailView({ vehicle }) {
             </h1>
             <p className="rounded-full bg-[var(--gold)] px-4 py-2 text-sm font-semibold text-black">
               {getDisplayText(vehicle.annee)}
+            </p>
+          </div>
+
+          <div className="mt-5 rounded-[1.5rem] bg-emerald-600 px-5 py-4 text-white shadow-[0_18px_40px_rgba(5,150,105,0.22)]">
+            <p className="text-sm font-semibold uppercase tracking-[0.18em] text-emerald-50/90">Prix de vente</p>
+            <p className="mt-2 text-2xl font-semibold sm:text-3xl">
+              {hasAmount(vehicle.prix_vente) ? formatFcfaAmount(vehicle.prix_vente) : "-"}
             </p>
           </div>
 

@@ -123,3 +123,20 @@ Optimisation ecran mobile
 - deplace la partie Notre différence et Logistique et paiement dans le footer (visible sur toute les pages, excepté mode editeur), et reduit les fonts et cards. Présentement ca encombre le contenue du site.
 - Dans détails vehicule dans inventaire, sur clique de l image pour zoomer, permet a l utilisateur de slider les images.
 - Dans le mode editeur permet de supprimer une image (image 2 à 10), pas seulement remplacer.
+
+30.
+Met a jour la base de donnees en ajoutant les fields suivants a la table vehicule. On travaille sur le frontend apres:
+- prix de vente
+- prix d'achat
+- montant transport
+- montant dedouanement
+
+31. 
+Frontend:
+- mode editeur: met a jour les pages:
+    - details et modifier: ajoute les nouveaux fields
+    - liste: affiche prix de vente (currency FCFA)
+
+- mode public (site): met a jour les pages:
+    - liste: affiche le prix en bg-vert dans la card (currency FCFA)
+    - details: affiche le prix en bg-vert (currency FCFA)

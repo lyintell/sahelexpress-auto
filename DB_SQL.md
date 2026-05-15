@@ -57,6 +57,10 @@ create table if not exists public.vehicules (
   type_transm text not null check (type_transm in ('auto', 'manuel')),
   type_moteur text not null check (type_moteur in ('8 cyl', '6 cyl', '4 cyl', 'hybrid')),
   kilometrage integer,
+  prix_vente numeric(12, 2),
+  prix_achat numeric(12, 2),
+  montant_transport numeric(12, 2),
+  montant_dedouanement numeric(12, 2),
   description text,
   ind_en_vedette boolean not null default true,
   ind_etat text not null check (ind_etat in ('vendu', 'disponible', 'non-disponible')),
@@ -77,6 +81,11 @@ create table if not exists public.vehicules (
   created_at timestamptz not null default timezone('utc', now()),
   updated_at timestamptz not null default timezone('utc', now())
 );
+
+alter table public.vehicules add column if not exists prix_vente numeric(12, 2);
+alter table public.vehicules add column if not exists prix_achat numeric(12, 2);
+alter table public.vehicules add column if not exists montant_transport numeric(12, 2);
+alter table public.vehicules add column if not exists montant_dedouanement numeric(12, 2);
 
 create table if not exists public.contact_details (
   id smallint primary key default 1,
@@ -192,4 +201,5 @@ commit;
 
 - `mot_de_passe_hash` est prevu pour eviter le stockage du mot de passe en clair. Si vous utilisez Supabase Auth, gardez cette colonne optionnelle ou retirez-la plus tard.
 - `marque_nom` et `model_nom` sont gardes pour coller a l'etat actuel du frontend, meme si ces valeurs peuvent etre reconstruites par jointure.
+- Les colonnes `prix_vente`, `prix_achat`, `montant_transport` et `montant_dedouanement` sont optionnelles pour permettre une migration progressive du frontend.
 - Les suppressions en cascade sont actives entre `marques -> modeles -> vehicules` et `modeles -> vehicules`.

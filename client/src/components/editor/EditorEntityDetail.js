@@ -3,14 +3,32 @@
 import Image from "next/image";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
-import { useState } from "react";
+import { useMemo, useState } from "react";
 import {
   updateEditorEntityItem,
   useEditorClientReady,
   useEditorEntityData,
 } from "./editorDataStore";
+import { formatEntityValue } from "./editorConfig";
 
-function renderValue(field, value, entityName) {
+function buildDisplayOptions(field, sources) {
+  if (Array.isArray(field.options)) {
+    return field.options;
+  }
+
+  if (!field.optionsSource) {
+    return [];
+  }
+
+  const items = sources[field.optionsSource] ?? [];
+
+  return items.map((item) => ({
+    label: String(item[field.optionLabelKey ?? "nom"] ?? item.nom ?? item.id),
+    value: String(item[field.optionValueKey ?? "id"] ?? item.id),
+  }));
+}
+
+function renderValue(field, value, entityName, fieldOptions) {
   if (field.type === "file" && value) {
     return (
       <div className="rounded-[1.2rem] border border-[var(--line)] bg-white p-2">
@@ -49,13 +67,24 @@ function renderValue(field, value, entityName) {
     );
   }
 
-  return <p className="text-lg font-semibold text-slate-900">{String(value ?? "-")}</p>;
+  const fieldForDisplay = fieldOptions.length ? { ...field, options: fieldOptions } : field;
+
+  return <p className="text-lg font-semibold text-slate-900">{formatEntityValue(fieldForDisplay, value)}</p>;
 }
 
 export default function EditorEntityDetail({ config, entityKey, itemId }) {
   const router = useRouter();
   const isClientReady = useEditorClientReady();
   const items = useEditorEntityData(entityKey);
+  const brands = useEditorEntityData("marques");
+  const visibleFields = config.fields.filter((field) => !field.hiddenOnDetail);
+  const fieldOptions = useMemo(() => {
+    const sources = { marques: brands };
+
+    return Object.fromEntries(
+      visibleFields.map((field) => [field.key, buildDisplayOptions(field, sources)]),
+    );
+  }, [brands, visibleFields]);
   const item = items.find((entry) => String(entry.id) === String(itemId)) ?? null;
   const [error, setError] = useState("");
   const [isMarkingAsSold, setIsMarkingAsSold] = useState(false);
@@ -131,10 +160,10 @@ export default function EditorEntityDetail({ config, entityKey, itemId }) {
       {error ? <p className="rounded-2xl bg-[#fbe4e4] px-4 py-3 text-sm font-semibold text-[var(--red)]">{error}</p> : null}
 
       <div className="grid gap-4 sm:grid-cols-2">
-        {config.fields.map((field) => (
+        {visibleFields.map((field) => (
           <div key={field.key} className={field.type === "list" ? "panel rounded-[1.75rem] p-5 sm:col-span-2" : "panel rounded-[1.75rem] p-5"}>
             <p className="text-sm uppercase tracking-[0.16em] text-slate-500">{field.label}</p>
-            <div className="mt-3">{renderValue(field, item[field.key], item.nom ?? config.singular)}</div>
+            <div className="mt-3">{renderValue(field, item[field.key], item.nom ?? config.singular, fieldOptions[field.key] ?? [])}</div>
           </div>
         ))}
       </div>

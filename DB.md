@@ -54,6 +54,10 @@ Note : l'utilisateur n'est pas encore géré par un CRUD complet comme les autre
 - `type_transm` * : `auto` | `manuel`
 - `type_moteur` * : `8 cyl` | `6 cyl` | `4 cyl` | `hybrid`
 - `kilometrage`
+- `prix_vente`
+- `prix_achat`
+- `montant_transport`
+- `montant_dedouanement`
 - `description`
 - `ind_en_vedette` * : `oui` | `non`
 - `ind_etat` * : `vendu` | `disponible` | `non-disponible`
