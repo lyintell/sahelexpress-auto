@@ -1,4 +1,5 @@
 import { cache } from "react";
+import { getApiBaseUrl } from "./apiBaseUrl";
 
 const defaultPublicBootstrap = {
   hero: {
@@ -14,16 +15,6 @@ const defaultPublicBootstrap = {
   modeles: [],
   vehicules: [],
 };
-
-function getApiBaseUrl() {
-  const configuredBaseUrl = process.env.NEXT_PUBLIC_API_URL?.trim();
-
-  if (configuredBaseUrl) {
-    return configuredBaseUrl.replace(/\/+$/, "");
-  }
-
-  return "http://localhost:4000/api";
-}
 
 function toText(value) {
   if (value === null || value === undefined) {

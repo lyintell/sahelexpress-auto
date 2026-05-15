@@ -1,12 +1,4 @@
-function getApiBaseUrl() {
-  const configuredBaseUrl = process.env.NEXT_PUBLIC_API_URL?.trim();
-
-  if (configuredBaseUrl) {
-    return configuredBaseUrl.replace(/\/+$/, "");
-  }
-
-  return "http://localhost:4000/api";
-}
+import { getApiBaseUrl } from "./apiBaseUrl";
 
 async function readJson(response) {
   try {

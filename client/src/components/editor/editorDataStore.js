@@ -1,6 +1,7 @@
 "use client";
 
 import { useEffect, useSyncExternalStore } from "react";
+import { getApiBaseUrl } from "../../lib/apiBaseUrl";
 import { readEditorSession } from "./editorSession";
 import { vehicleImageFieldKeys } from "./editorConfig";
 
@@ -26,16 +27,6 @@ const defaultEditorData = {
 let cachedEditorData = cloneEditorData(defaultEditorData);
 let hasInitializedLocalCache = false;
 let editorBootstrapPromise = null;
-
-function getApiBaseUrl() {
-  const configuredBaseUrl = process.env.NEXT_PUBLIC_API_URL?.trim();
-
-  if (configuredBaseUrl) {
-    return configuredBaseUrl.replace(/\/+$/, "");
-  }
-
-  return "http://localhost:4000/api";
-}
 
 function cloneEditorData(data) {
   return JSON.parse(JSON.stringify(data));
