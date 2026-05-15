@@ -5,10 +5,36 @@ import { healthRouter } from "./routes/health.js";
 import { publicRouter } from "./routes/public.js";
 import { adminRouter } from "./routes/admin.js";
 
+function getAllowedOrigins() {
+  const configuredOrigin = new URL(env.CLIENT_APP_URL);
+  const allowedOrigins = new Set([configuredOrigin.origin]);
+  const hostname = configuredOrigin.hostname;
+
+  if (hostname.startsWith("www.")) {
+    allowedOrigins.add(`${configuredOrigin.protocol}//${hostname.slice(4)}${configuredOrigin.port ? `:${configuredOrigin.port}` : ""}`);
+  } else if (hostname !== "localhost" && hostname !== "127.0.0.1") {
+    allowedOrigins.add(`${configuredOrigin.protocol}//www.${hostname}${configuredOrigin.port ? `:${configuredOrigin.port}` : ""}`);
+  }
+
+  return allowedOrigins;
+}
+
 export function createApp() {
   const app = express();
+  const allowedOrigins = getAllowedOrigins();
 
-  app.use(cors({ origin: env.CLIENT_APP_URL, credentials: true }));
+  app.use(
+    cors({
+      origin(origin, callback) {
+        if (!origin || allowedOrigins.has(origin)) {
+          return callback(null, true);
+        }
+
+        return callback(new Error(`Origin ${origin} is not allowed by CORS.`));
+      },
+      credentials: true,
+    }),
+  );
   app.use(express.json({ limit: "10mb" }));
 
   app.use("/api", healthRouter);
