@@ -20,6 +20,11 @@ export const metadata = {
     default: "Sahel Express Auto",
     template: "%s | Sahel Express Auto",
   },
+  icons: {
+    icon: "/icon.png",
+    shortcut: "/icon.png",
+    apple: "/icon.png",
+  },
   description:
     "Véhicules importés du Canada pour les clients de Bamako, avec inventaire, vedettes et prise de contact rapide.",
 };

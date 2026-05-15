@@ -39,10 +39,38 @@ function specItems(vehicle) {
 }
 
 export default function VehicleDetailView({ vehicle }) {
-  const imageList = Array.isArray(vehicle.images) ? vehicle.images.filter(Boolean) : [];
-  const fallbackImage = vehicle.image || imageList[0] || "";
-  const [activeImage, setActiveImage] = useState(fallbackImage);
+  const imageList = Array.from(
+    new Set([vehicle.image, ...(Array.isArray(vehicle.images) ? vehicle.images : [])].filter(Boolean)),
+  );
+  const [activeIndex, setActiveIndex] = useState(0);
   const [isModalOpen, setIsModalOpen] = useState(false);
+  const activeImage = imageList[activeIndex] || "";
+
+  function showImage(index) {
+    if (!imageList.length) {
+      return;
+    }
+
+    const lastIndex = imageList.length - 1;
+    const boundedIndex = Math.min(Math.max(index, 0), lastIndex);
+    setActiveIndex(boundedIndex);
+  }
+
+  function goToPreviousImage() {
+    if (imageList.length <= 1) {
+      return;
+    }
+
+    setActiveIndex((current) => (current === 0 ? imageList.length - 1 : current - 1));
+  }
+
+  function goToNextImage() {
+    if (imageList.length <= 1) {
+      return;
+    }
+
+    setActiveIndex((current) => (current === imageList.length - 1 ? 0 : current + 1));
+  }
 
   return (
     <>
@@ -68,18 +96,25 @@ export default function VehicleDetailView({ vehicle }) {
                   className="object-cover"
                 />
               ) : null}
+
+              {imageList.length > 1 ? (
+                <div className="pointer-events-none absolute inset-x-0 top-1/2 flex -translate-y-1/2 items-center justify-between px-3">
+                  <span className="inline-flex h-10 w-10 items-center justify-center rounded-full bg-black/45 text-xl text-white">‹</span>
+                  <span className="inline-flex h-10 w-10 items-center justify-center rounded-full bg-black/45 text-xl text-white">›</span>
+                </div>
+              ) : null}
             </div>
           </button>
 
           <div className="mt-4 grid grid-cols-2 gap-3 sm:grid-cols-4 md:grid-cols-5">
             {imageList.map((image, index) => {
-              const isActive = image === activeImage;
+              const isActive = index === activeIndex;
 
               return (
                 <button
                   key={`${vehicle.id}-${index}`}
                   type="button"
-                  onClick={() => setActiveImage(image)}
+                  onClick={() => showImage(index)}
                   className={`panel rounded-[1.2rem] p-1 transition ${
                     isActive ? "ring-2 ring-[var(--gold)]" : "hover:scale-[1.02]"
                   }`}
@@ -147,6 +182,26 @@ export default function VehicleDetailView({ vehicle }) {
             >
               Fermer
             </button>
+            {imageList.length > 1 ? (
+              <>
+                <button
+                  type="button"
+                  onClick={goToPreviousImage}
+                  className="absolute left-3 top-1/2 z-10 inline-flex h-12 w-12 -translate-y-1/2 items-center justify-center rounded-full bg-white/90 text-2xl font-semibold text-slate-900"
+                  aria-label="Image précédente"
+                >
+                  ‹
+                </button>
+                <button
+                  type="button"
+                  onClick={goToNextImage}
+                  className="absolute right-3 top-1/2 z-10 inline-flex h-12 w-12 -translate-y-1/2 items-center justify-center rounded-full bg-white/90 text-2xl font-semibold text-slate-900"
+                  aria-label="Image suivante"
+                >
+                  ›
+                </button>
+              </>
+            ) : null}
             <div className="relative aspect-[16/10] overflow-hidden rounded-[1.75rem] bg-black">
               <Image
                 src={activeImage}
@@ -157,6 +212,34 @@ export default function VehicleDetailView({ vehicle }) {
                 className="object-contain"
               />
             </div>
+
+            {imageList.length > 1 ? (
+              <div className="mt-4 flex gap-3 overflow-x-auto pb-2">
+                {imageList.map((image, index) => {
+                  const isActive = index === activeIndex;
+
+                  return (
+                    <button
+                      key={`modal-${vehicle.id}-${index}`}
+                      type="button"
+                      onClick={() => showImage(index)}
+                      className={`relative h-20 w-28 shrink-0 overflow-hidden rounded-[1rem] border ${
+                        isActive ? "border-[var(--gold)]" : "border-white/20"
+                      }`}
+                    >
+                      <Image
+                        src={image}
+                        alt={`${getDisplayText(vehicle.nom)} ${index + 1}`}
+                        fill
+                        unoptimized
+                        sizes="112px"
+                        className="object-cover"
+                      />
+                    </button>
+                  );
+                })}
+              </div>
+            ) : null}
           </div>
         </div>
       ) : null}

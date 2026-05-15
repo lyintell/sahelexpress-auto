@@ -104,7 +104,6 @@ export default function EditorEntityDetail({ config, entityKey, itemId }) {
           <h1 className="font-[family-name:var(--font-heading)] text-4xl font-semibold">
             Détails {config.singular.toLowerCase()}
           </h1>
-          <p className="mt-2 text-slate-600">Affichage complet des champs synchronisés avec le backend admin.</p>
         </div>
         <div className="flex flex-wrap gap-3">
           <Link href={config.basePath} className="button-secondary">

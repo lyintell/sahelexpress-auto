@@ -254,7 +254,6 @@ function EditorEntityFormContent({
       <div className="flex items-center justify-between gap-4">
         <div>
           <h1 className="font-[family-name:var(--font-heading)] text-4xl font-semibold">{title}</h1>
-          <p className="mt-2 text-slate-600">Les identifiants et champs système sont calculés automatiquement puis enregistrés via l&apos;API admin.</p>
         </div>
         <div className="flex flex-wrap gap-3">
           <Link href={config.basePath} className="button-secondary">
@@ -365,6 +364,15 @@ function EditorEntityFormContent({
                         void handleFileChange(field, event.target.files);
                       }}
                     />
+                    {field.key !== "image" && value ? (
+                      <button
+                        type="button"
+                        onClick={() => setDraftFormData((current) => ({ ...(current ?? formData), [field.key]: "" }))}
+                        className="inline-flex rounded-full border border-[var(--line)] bg-white px-4 py-2 text-sm font-semibold text-slate-700"
+                      >
+                        Supprimer cette image
+                      </button>
+                    ) : null}
                     {value ? (
                       <div className="space-y-2">
                         <p className="text-sm font-semibold text-slate-700">Image prête à être enregistrée.</p>

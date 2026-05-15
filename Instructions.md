@@ -109,3 +109,17 @@ Dans mon profil, masquer les inputs mot de passe. Ajoute Changer mot de passe à
 
 27.
 Parfais, le site fonction en mode dev both client et server (supabase). Dis moi ce que je doit faire pour deployer live a sahelexpress-auto.com
+
+28.
+Parfait j ai mis le site en production live.
+Cependant le login ne fonctionne pas. J'obtient "failed to fetch" lorsque j essaie de me connecter au mode editeur. 
+
+29. 
+Optimisation ecran mobile
+- le header menu (navbar) doit etre un burger menu sur mobile. presentement le header n apparait pas sur mobile
+- le Logo sur le header menu doit etre centré.
+- reduit le height du hero
+- Dans le titre du navigateur, remplace le logo (nextjs) par le logo du site.
+- deplace la partie Notre différence et Logistique et paiement dans le footer (visible sur toute les pages, excepté mode editeur), et reduit les fonts et cards. Présentement ca encombre le contenue du site.
+- Dans détails vehicule dans inventaire, sur clique de l image pour zoomer, permet a l utilisateur de slider les images.
+- Dans le mode editeur permet de supprimer une image (image 2 à 10), pas seulement remplacer.

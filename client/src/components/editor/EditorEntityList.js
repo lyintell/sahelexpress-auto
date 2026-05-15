@@ -70,7 +70,6 @@ export default function EditorEntityList({ config, entityKey }) {
           <h1 className="font-[family-name:var(--font-heading)] text-4xl font-semibold">
             {config.plural}
           </h1>
-          <p className="mt-2 text-slate-600">Liste synchronisée avec le backend admin, avec cache local de secours dans le navigateur.</p>
         </div>
         <Link href={`${config.basePath}/nouveau`} className="button-primary">
           Ajouter {config.singular.toLowerCase()}
